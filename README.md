@@ -23,13 +23,35 @@ m >> l >>m  产生了两个m(MainActivity)
 
 用个list装起来全部的activity，每次打开一个activity的时候传个context进去，finish的时候移除就好，可以用BaseActivity封装好也不是特别麻烦，要干掉全部的时候，一个循环就干掉了
 
-#2 用广播
+#2 用广播(本地广播)
 
 用广播，就是之前写的RxBus或者eventBus，或者自己写，要退出了发送个退出的广播，要关掉的activity注册个监听接收广播后finish掉就好
+1，先发送广播
+ Intent  intent1 = new Intent("finish");
+    sendBroadcast(intent1);
 
+2，然后在要finish的Activity中注册广播
+
+ private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(intent.getAction().equals("finish")) {
+                Toast.makeText(ThreeActivity.this, "好的", Toast.LENGTH_SHORT).show();
+                ThreeActivity.this.finish();//接受到消息就会结束自身
+            }
+
+        }
+    };
+
+    //注册，不要忘记了在destroy（）方法中取消注册,不然可能会包oom哦
+
+    IntentFilter intentFilter = new IntentFilter();
+    intentFilter.addAction("finish");
+   registerReceiver(mBroadcastReceiver, intentFilter);
 #3 设置启动方式
 
-standard 这个是默认的，正常都用这种
+standard 这个是默认的，正常都用这种,
 singleInstance这个是坑爹的，一般不用，也最好不要乱用，它会新建多一个栈
 手机查看所有启动应用的窗口再一键清除的嘛，具体表现就是用了以后，这里会有2个窗口。反正不用就是了
 

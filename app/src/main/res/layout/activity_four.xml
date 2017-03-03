@@ -11,9 +11,21 @@
     tools:context="com.example.lcit.task.MainActivity">
 
     <Button
+        android:id="@+id/btn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:onClick="btnclick"
         android:text="4"/>
+
+
+    <Button
+        android:id="@+id/btn2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="同过广播finish，ThreeActivity"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/btn1"
+        android:onClick="btnclick"
+        />
 </RelativeLayout>

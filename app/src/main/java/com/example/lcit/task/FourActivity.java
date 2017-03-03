@@ -11,6 +11,7 @@ import android.view.View;
  */
 public class FourActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,9 +19,19 @@ public class FourActivity extends AppCompatActivity {
     }
 
     public void btnclick(View view) {
+        switch (view.getId()) {
+            case R.id.btn1:
+                Intent intent = new Intent(this, FourActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn2:
+                Intent  intent1 = new Intent("finish");
+                sendBroadcast(intent1);
+                break;
 
-        Intent intent = new Intent(this, FourActivity.class);
-        startActivity(intent);
+        }
+
+
 
 //        ScreenManager.getScreenManager();
 
