@@ -102,7 +102,8 @@ onNewIntent
                 android:theme="@style/AppTheme"/>
 
 
- #其实一般的MainActivity的启动模式都会设置成singleTask，这样才会保证任务栈中只有一个MainActivity实例
+#其实一般的MainActivity的启动模式都会设置成singleTask，这样才会保证任务栈中只有一个MainActivity实例
 
 
-  #4 当然也可以在intent跳转的时候给intent加个Flag，你喜欢就好，反正我不想那样加clearTaskOnLaunch
+
+#4 当然也可以在intent跳转的时候给intent加个Flag，你喜欢就好，反正我不想那样加clearTaskOnLaunch
