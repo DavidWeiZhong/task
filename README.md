@@ -23,6 +23,114 @@ m >> l >>m  产生了两个m(MainActivity)
 
 用个list装起来全部的activity，每次打开一个activity的时候传个context进去，finish的时候移除就好，可以用BaseActivity封装好也不是特别麻烦，要干掉全部的时候，一个循环就干掉了
 
+package activity.task;
+
+import android.app.Activity;
+
+import java.util.LinkedList;
+
+/**
+ * 自定义的activity栈
+ */
+public class ActivityTask {
+
+    private static LinkedList<Activity> activityStack;
+
+    // 单例
+    private static ActivityTask instance;
+
+    private ActivityTask() {
+    }
+
+    public static ActivityTask getInstance() {
+        if (instance == null) {
+            instance = new ActivityTask();
+        }
+        return instance;
+    }
+
+    /*
+     * 压入栈顶
+     */
+    public void pushActivity(Activity activity) {
+        if (activityStack == null) {
+            activityStack = new LinkedList<Activity>();
+        }
+        activityStack.push(activity);
+    }
+
+    /*
+     * 移除栈顶activity
+     */
+    public void popActivity() {
+        Activity activity = activityStack.pop();
+        if (activity != null) {
+            activity.finish();
+            activity = null;
+        }
+    }
+
+    /*
+     * 移除指定的activity
+     */
+    public void popOneActivity(Activity activity) {
+        if (activity != null) {
+            activity.finish();
+            activityStack.remove(activity);
+            activity = null;
+        }
+    }
+
+    /*
+     * 获取当前栈顶activity
+     */
+    public Activity currentActivity() {
+        Activity activity = activityStack.peek();
+        return activity;
+    }
+
+    /*
+     * 移除clazz之后的所有activity
+     * 例如开启了A、B、C、D、E五个activity，popAllActivityExceptOne(C.class);
+     * 则会移除D和E
+     */
+    public void popAllActivityExceptOne(Class clazz) {
+        while (true) {
+            Activity activity = currentActivity();
+            if (activity == null || activity.getClass().equals(clazz)) {
+                break;
+            }
+            popOneActivity(activity);
+        }
+    }
+
+    public void popAllActivity() {
+        while (true) {
+            Activity activity = currentActivity();
+            if (activity == null) {
+                break;
+            }
+            popOneActivity(activity);
+        }
+    }
+
+    /*
+     * 退出app,清除所有activity
+     */
+    public void exit() {
+        while (true) {
+            Activity activity = currentActivity();
+            if (activity == null) {
+                break;
+            }
+            popOneActivity(activity);
+        }
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+}
+
+
 #2 用广播(本地广播)
 
 用广播，就是之前写的RxBus或者eventBus，或者自己写，要退出了发送个退出的广播，要关掉的activity注册个监听接收广播后finish掉就好
